@@ -213,9 +213,9 @@ sub analyze {
 				if(scalar @{$packet_cache{$group}{$ts_pid}} > 5) { shift(@{$packet_cache{$group}{$ts_pid}}); }
 			}
 
-			# CC monitoring, skip AFC only packets
+			# CC monitoring, skip AFC only and NULL packets
 			if($ccmonit) {
-				if($cc_cache{$group}{$ts_pid} && (($cc_cache{$group}{$ts_pid} + 1) % 16) != $ts_cc && $ts_afc != 0b10) {
+				if($cc_cache{$group}{$ts_pid} && (($cc_cache{$group}{$ts_pid} + 1) % 16) != $ts_cc && $ts_afc != 0b10 && $ts_pid != 0x1fff) {
 					slog(sprintf "CC error! PID: 0x%x Expected: %d, is %d", $ts_pid, (($cc_cache{$group}{$ts_pid} + 1) % 16), $ts_cc);
 
 					# print last packets from cache
